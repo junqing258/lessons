@@ -5,3 +5,5 @@ function mirror(something) {
 	test2();
   return something
 }
+
+const AA = () => 23242;
