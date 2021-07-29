@@ -1,8 +1,8 @@
-import { test1, test2 } from './lib';
+import { test1, _tracker } from './lib';
 
 function mirror(something) {
-	test1();
-	test2();
+	_tracker('something doing');
+	console.log('test1')
   return something
 }
 

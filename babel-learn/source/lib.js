@@ -3,11 +3,11 @@ const test1 = () => {
 	console.log('test1 run')
 }
 
-const test2 = () => {
+const _tracker = () => {
 	console.log('test2 run')
 }
 
 export {
 	test1,
-	test2,
+	_tracker,
 }
