@@ -15,15 +15,19 @@ const sourceCode = fs.readFileSync(path.join(__dirname, './source/code.js'), {
 const ast = parser.parse(sourceCode, {
 	sourceType: 'module',
 });
+
+// https://mp.weixin.qq.com/s/oxUF3XzpvEEDjmn5b8BhtA
+// https://juejin.cn/post/6855129007982772237
+
 const visitor = {
 	Identifier(path) {
 		// path.node.name = path.node.name.split('').reverse().join('')
 	},
 	ImportDeclaration(path) {
-		console.log(path.node.source.value);
+		console.log(path.get('source').node.value);
 	},
-	FunctionDeclaration(path) {
-			
+	'ClassMethod|ArrowFunctionExpression|FunctionExpression|FunctionDeclaration' (path, state) {
+
 	}
 };
 traverse(ast, visitor);
