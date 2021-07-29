@@ -14,15 +14,8 @@ const sourceCode = fs.readFileSync(path.join(__dirname, './source/code.js'), {
 });
 
 const ast = parser.parse(sourceCode, {
-	sourceType: 'module',
-	// presets: ["@babel/preset-env"],  
+	sourceType: 'module'
 });
-// const { code } = babel.transformFromAst(ast, null, {
-//   presets: ["@babel/preset-env"],     //es5模块类型
-// });
-
-// https://mp.weixin.qq.com/s/oxUF3XzpvEEDjmn5b8BhtA
-// https://juejin.cn/post/6855129007982772237
 
 const visitor = {
 	Identifier: (path) => {
@@ -31,19 +24,20 @@ const visitor = {
 	ImportDeclaration: (path) => {
 		console.log(path.get('source').node.value);
 	},
-	'ClassMethod|ArrowFunctionExpression|FunctionExpression|FunctionDeclaration': (path, state) => {
-		const bodyPath = path.get('body');
-		const temp = `log('aaa')`;
-		const trackerAST = template.statement(temp)();
-		if (bodyPath.isBlockStatement()) { // 有函数体
-			bodyPath.node.body.unshift(trackerAST);
-		} else { // 没有函数体
-			const statement = template.statement(`{${temp};return PREV_BODY;}`)({
-				PREV_BODY: bodyPath.node
-			});
-			bodyPath.replaceWith(statement);
-		}
-	},
+	'ClassMethod|ArrowFunctionExpression|FunctionExpression|FunctionDeclaration':
+		(path, state) => {
+			const bodyPath = path.get('body');
+			const temp = `log('aaa')`;
+			const trackerAST = template.statement(temp)();
+			if (bodyPath.isBlockStatement()) { // 有函数体
+				bodyPath.node.body.unshift(trackerAST);
+			} else { // 没有函数体
+				const statement = template.statement(`{${temp};return PREV_BODY;}`)({
+					PREV_BODY: bodyPath.node
+				});
+				bodyPath.replaceWith(statement);
+			}
+		},
 	CallExpression(path, state) {
 		const callee = path.get("callee");
 		const object = callee.get("object");
