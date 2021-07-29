@@ -43,11 +43,11 @@ const visitor = {
 		const object = callee.get("object");
 		const property = callee.get("property");
 		if (t.isMemberExpression(callee) && isGlobalConsoleId(object)) {
-			const loc = callee.get("loc");
+			const loc = path.get("loc");
 			const {
 				line,
 				column
-			} = loc.node.start;
+			} = loc.get("start");
 			const location = `[line ${line},column ${column}]`;
 			path.node.arguments.unshift(t.stringLiteral(location))
 		}
