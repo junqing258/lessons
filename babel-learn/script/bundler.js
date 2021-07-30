@@ -1,11 +1,8 @@
 // bundler.js
 const fs = require('fs-extra');
 const path = require('path');
-// 把JS代码转为AST（抽象语法树，可以简单google一下概念，先不用太深入）
 const parser = require('@babel/parser');
-// 帮助我们解析AST的内容，最直接的就是通过 ImportDeclaration 点位找到文件的依赖入口
 const traverse = require('@babel/traverse').default;
-// babel.transformFromAst(AST, code, options) 可以帮助我们把AST转换成能ES5代码
 const babel = require('@babel/core');
 
 let rootDir = './';
@@ -81,7 +78,7 @@ const makeDependenciesGraph = entry => {
 	return graph;
 };
 
-
-const graphInfo = makeDependenciesGraph(path.join(__dirname, '../src/index.js'));
+const entryFile = path.join(__dirname, '../src/index.js');
+const graphInfo = makeDependenciesGraph(entryFile);
 console.log('graphInfo', graphInfo);
 
