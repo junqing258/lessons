@@ -8,8 +8,10 @@ const importModule = require('@babel/helper-module-imports');
 const babel = require("@babel/core");
 const t = require('@babel/types');
 
+let filePath = '../src/index.js';
+let fileName = path.relative(path.join(__dirname, '../src'), filePath);
 
-const sourceCode = fs.readFileSync(path.join(__dirname, './source/code.js'), {
+const sourceCode = fs.readFileSync(path.join(__dirname, filePath), {
 	encoding: 'utf-8'
 });
 
@@ -18,7 +20,8 @@ const ast = parser.parse(sourceCode, {
 });
 
 const visitor = {
-	Identifier: (path) => {
+	Identifier: (path, state) => {
+		console.log(this.file.opts.filename);
 		// path.node.name = path.node.name.split('').reverse().join('')
 	},
 	ImportDeclaration: (path) => {
@@ -47,8 +50,8 @@ const visitor = {
 			const {
 				line,
 				column
-			} = loc.get("start");
-			const location = `[line ${line},column ${column}]`;
+			} = loc.node.start;
+			const location = `[${fileName},${line}:${column}]`;
 			path.node.arguments.unshift(t.stringLiteral(location))
 		}
 	}
